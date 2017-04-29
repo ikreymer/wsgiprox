@@ -13,7 +13,7 @@ os:
 sudo: false
 
 install:
-  - "pip install --disable-pip-version-check --user --upgrade pip"
+  - "pip install -U pip"
   - "pip install -U setuptools"
   - "pip install gevent-websocket pyopenssl"
   - "pip install coverage pytest-cov coveralls"
