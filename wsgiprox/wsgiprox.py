@@ -131,7 +131,7 @@ class ConnectHandler(object):
         for chunk in orig_iter:
             chunk_len = len(chunk)
             if chunk_len:
-                yield b'%X\r\n' % chunk_len
+                yield ('%X\r\n' % chunk_len).encode()
                 yield chunk
                 yield b'\r\n'
 
