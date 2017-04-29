@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import socket
 import ssl
 
@@ -361,7 +363,7 @@ class WSGIProxMiddleware(object):
     def conv_connect_env(self, env, reader, scheme):
         statusline = reader.readline().rstrip()
 
-        if six.PY3:
+        if six.PY3:  #pragma: no cover
             statusline = statusline.decode('iso-8859-1')
 
         statusparts = statusline.split(' ', 2)
@@ -387,7 +389,7 @@ class WSGIProxMiddleware(object):
             line = reader.readline()
             if line:
                 line = line.rstrip()
-                if six.PY3:
+                if six.PY3:  #pragma: no cover
                     line = line.decode('iso-8859-1')
 
             if not line:
@@ -410,10 +412,10 @@ class WSGIProxMiddleware(object):
         env['wsgi.input'] = reader
 
     @classmethod
-    def get_raw_socket(cls, env):
+    def get_raw_socket(cls, env):  #pragma: no cover
         sock = None
 
-        if env.get('uwsgi.version'):  # pragma: no cover
+        if env.get('uwsgi.version'):
             try:
                 import uwsgi
                 fd = uwsgi.connection_fd()
@@ -424,20 +426,25 @@ class WSGIProxMiddleware(object):
                     sock = conn
             except Exception as e:
                 pass
-        elif env.get('gunicorn.socket'):  # pragma: no cover
+        elif env.get('gunicorn.socket'):
             sock = env['gunicorn.socket']
 
         if not sock:
             # attempt to find socket from wsgi.input
             input_ = env.get('wsgi.input')
             if input_:
-                if hasattr(input_, '_sock'):  # pragma: no cover
+                if hasattr(input_, '_sock'):
                     raw = input_._sock
-                    sock = socket.socket(_sock=raw)  # pragma: no cover
-                elif hasattr(input_, 'raw'):  #pragma: no cover
+                    sock = socket.socket(_sock=raw)
+                elif hasattr(input_, 'raw'):
                     sock = input_.raw._sock
                 elif hasattr(input_, 'rfile'):
-                    sock = input_.rfile.raw._sock
+                    # PY3
+                    if hasattr(input_.rfile, 'raw'):
+                        sock = input_.rfile.raw._sock
+                    # PY2
+                    else:
+                        sock = input_.rfile._sock
 
         return sock
 

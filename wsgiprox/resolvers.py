@@ -40,7 +40,7 @@ class ProxyAuthResolver(object):
         if parts[0].lower() == 'basic' and len(parts) == 2:
             user_pass = base64.b64decode(parts[1].encode('utf-8'))
 
-            if six.PY3:
+            if six.PY3:  #pragma: no cover
                 user_pass = user_pass.decode('utf-8')
 
         return user_pass
