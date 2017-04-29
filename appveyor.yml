@@ -12,7 +12,7 @@ install:
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
   - "pip install --disable-pip-version-check --user --upgrade pip"
   - "pip install -U setuptools"
-  - "pip install gevent-websocket"
+  - "pip install gevent-websocket pyopenssl"
   - "pip install coverage pytest-cov coveralls"
 
 build_script:
